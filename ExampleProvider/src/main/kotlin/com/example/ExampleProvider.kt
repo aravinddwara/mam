@@ -5,18 +5,27 @@ import com.lagradost.cloudstream3.TvType
 import com.lagradost.cloudstream3.MainAPI
 import com.lagradost.cloudstream3.SearchResponse
 
-class ExampleProvider(val plugin: TestPlugin) : MainAPI() { // all providers must be an intstance of MainAPI
-    override var mainUrl = "https://www.tamildhool.net/" 
-    override var name = "Example provider"
-    override val supportedTypes = setOf(TvType.Movie)
+class Streamblasters : MainAPI() {
+    override var mainUrl              = "https://www.tamildhool.net/"
+    override var name                 = "Tamildhool"
+    override val hasMainPage          = true
+    override var lang                 = "hi"
+    override val hasQuickSearch       = true
+    override val hasDownloadSupport   = true
+    override val supportedTypes       = setOf(TvType.Movie)
 
-    override var lang = "ta"
+     override val mainPage = mainPageOf(
+        "" to "Latest",
+        "vijay-tv/vijay-tv-serial/baakiyalakshmi" to "Baakiyalakshmi",
+        "vijay-tv/vijay-tv-serial/siragadikka-aasai/" to "Siragadikka Aasai",
+         )
 
-    // enable this when your provider has a main page
-    override val hasMainPage = true
+      ooverride suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
+    val document = app.get("$mainUrl/${request.data}/page/$page/").document
 
-    // this function gets called when you search for something
-    override suspend fun search(query: String): List<SearchResponse> {
-        return listOf<SearchResponse>()
-    }
+    // Target <section id="recent-posts"> and get its <article> children
+    val home = document.select("section#recent-posts > article")
+        .mapNotNull { it.toSearchResult() }
+
+    return newHomePageResponse(request.name, home)
 }
