@@ -1,1 +1,8 @@
-
+{
+    "name": "mam",
+    "description": "Mam Repository",
+    "manifestVersion": 1,
+    "pluginLists": [
+      "https://raw.githubusercontent.com/aravinddwara/mam/refs/heads/builds/plugins.json"
+    ]
+  }
