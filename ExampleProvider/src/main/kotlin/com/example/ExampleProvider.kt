@@ -20,7 +20,7 @@ class Streamblasters : MainAPI() {
         "vijay-tv/vijay-tv-serial/siragadikka-aasai/" to "Siragadikka Aasai",
          )
 
-      ooverride suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
+      override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
     val document = app.get("$mainUrl/${request.data}/page/$page/").document
 
     // Target <section id="recent-posts"> and get its <article> children
